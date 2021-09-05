@@ -1,3 +1,5 @@
+import { createMMKV } from './createMMKV';
+
 /**
  * Used for configuration of a single MMKV instance.
  */
@@ -87,14 +89,7 @@ export class MMKV implements MMKVInterface {
    * If no custom `id` is supplied, `'default'` will be used.
    */
   constructor(configuration: MMKVConfiguration = { id: 'mmkv.default' }) {
-    // @ts-expect-error global func is a native JSI func
-    if (global.mmkvCreateNewInstance == null) {
-      throw new Error(
-        'Failed to create a new MMKV instance, the native initializer function does not exist. Is the native MMKV library correctly installed? Make sure to disable any remote debugger (e.g. Chrome) to use JSI!'
-      );
-    }
-    // @ts-expect-error global func is a native JSI func
-    this.nativeInstance = global.mmkvCreateNewInstance(configuration);
+    this.nativeInstance = createMMKV(configuration);
   }
 
   set(key: string, value: boolean | string | number): void {
